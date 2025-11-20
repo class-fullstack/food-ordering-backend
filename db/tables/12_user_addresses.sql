@@ -6,7 +6,7 @@ CREATE TABLE user_addresses (
     receiver_phone  text NOT NULL,
     address_line    text NOT NULL,
     ward            text,
-    district        text,
+--    district        text,
     city            text,
     note            text,
     is_default      boolean NOT NULL DEFAULT false,
