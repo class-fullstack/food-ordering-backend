@@ -35,4 +35,3 @@ JOIN provinces p
     ON p.code = w.province_code
 WHERE p.name ILIKE '%Khánh Hòa%'   -- hoặc p.full_name = 'Tỉnh Khánh Hòa'
 ORDER BY w.full_name;
-

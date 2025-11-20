@@ -10,11 +10,5 @@ CREATE TABLE menu_items (
     is_combo       boolean NOT NULL DEFAULT false,
     is_deleted     boolean NOT NULL DEFAULT false,
     created_at     timestamptz NOT NULL DEFAULT now(),
-    updated_at     timestamptz NOT NULL DEFAULT now(),
-
-    FOREIGN KEY (category_id) REFERENCES menu_categories(id),
-    FOREIGN KEY (main_image_id) REFERENCES menu_item_images(id)
+    updated_at     timestamptz NOT NULL DEFAULT now()
 );
-
-CREATE INDEX ix_menu_items_category
-    ON menu_items(category_id);

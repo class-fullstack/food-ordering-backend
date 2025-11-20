@@ -7,10 +7,5 @@ CREATE TABLE menu_item_images (
     sort_order   integer NOT NULL DEFAULT 0,
     is_deleted   boolean NOT NULL DEFAULT false,
     created_at   timestamptz NOT NULL DEFAULT now(),
-    updated_at   timestamptz NOT NULL DEFAULT now(),
-
-    FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
+    updated_at   timestamptz NOT NULL DEFAULT now()
 );
-
-CREATE INDEX ix_menu_item_images_item
-    ON menu_item_images (menu_item_id);
