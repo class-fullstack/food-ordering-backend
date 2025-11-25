@@ -12,12 +12,35 @@ class ErrorResponseCors extends Error {
   }
 }
 
+//* ------- 4xx Client Error Responses ------- //
 //* 400 Bad Request
 class BadRequestResponse extends ErrorResponseCors {
   constructor({
     message = reasonParsesUtils.BAD_REQUEST,
     status = statusCodesUtils.BAD_REQUEST,
     code = codeCustomUtils.BAD_REQUEST.code,
+  } = {}) {
+    super({ message, status, code });
+  }
+}
+
+//* 401 Unauthorized
+class UnauthorizedResponse extends ErrorResponseCors {
+  constructor({
+    message = reasonParsesUtils.UNAUTHORIZED,
+    status = statusCodesUtils.UNAUTHORIZED,
+    code = codeCustomUtils.UNAUTHORIZED.code,
+  } = {}) {
+    super({ message, status, code });
+  }
+}
+
+//* 403 Forbidden
+class ForbiddenResponse extends ErrorResponseCors {
+  constructor({
+    message = reasonParsesUtils.FORBIDDEN,
+    status = statusCodesUtils.FORBIDDEN,
+    code = codeCustomUtils.FORBIDDEN.code,
   } = {}) {
     super({ message, status, code });
   }
@@ -34,7 +57,21 @@ class NotFoundResponse extends ErrorResponseCors {
   }
 }
 
+//* ------- 5xx Server Error Responses ------- //
+class InternalServerErrorResponse extends ErrorResponseCors {
+  constructor({
+    message = reasonParsesUtils.INTERNAL_SERVER_ERROR,
+    status = statusCodesUtils.INTERNAL_SERVER_ERROR,
+    code = codeCustomUtils.INTERNAL_SERVER_ERROR.code,
+  } = {}) {
+    super({ message, status, code });
+  }
+}
+
 module.exports = {
   BadRequestResponse,
   NotFoundResponse,
+  UnauthorizedResponse,
+  ForbiddenResponse,
+  InternalServerErrorResponse,
 };

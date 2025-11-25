@@ -1,4 +1,9 @@
+const appConstants = require("../constants/app.constants");
 const { NotFoundResponse } = require("../cors/errorResponse.cors");
+const AppHelpers = require("../helpers/app.helpers");
+const codeCustomUtils = require("./codeCustom.utils");
+const reasonPhrasesUtils = require("./reasonPhrases.utils");
+const statusCodesUtils = require("./statusCodes.utils");
 
 const notFoundHandlerUtils = (_, __, next) => {
   const error = new NotFoundResponse();
@@ -6,9 +11,10 @@ const notFoundHandlerUtils = (_, __, next) => {
 };
 
 const errorHandlerUtils = (error, __, res, ____) => {
-  const statusCode = error.status;
-  const errorCode = error.code;
-  const errorMessage = error.message;
+  const statusCode = error.status || statusCodesUtils.INTERNAL_SERVER_ERROR;
+  const errorCode = error.code || codeCustomUtils.INTERNAL_SERVER_ERROR.code;
+  const errorMessage =
+    error.message || reasonPhrasesUtils.INTERNAL_SERVER_ERROR;
   const errorTime = error.timestamp || new Date().getTime();
 
   const response = {
@@ -17,8 +23,9 @@ const errorHandlerUtils = (error, __, res, ____) => {
     message: errorMessage,
     timestamp: errorTime,
   };
-
-  response.stack = error.stack;
+  if (AppHelpers.getAppEnv() === appConstants.APP_ENVS[0]) {
+    response.stack = error.stack;
+  }
 
   return res.status(statusCode).json(response);
 };
