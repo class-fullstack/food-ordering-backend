@@ -1,5 +1,5 @@
 # Folder constants
-DOCKER_COMPOSE := docker-compose.yml
+DOCKER_COMPOSE := docker-compose.yaml
 
 ############# BUILD #############
 run-build:

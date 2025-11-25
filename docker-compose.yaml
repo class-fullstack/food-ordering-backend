@@ -16,3 +16,7 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - "54333:5432"
+
+volumes:
+  postgres_data:
+    driver: local
