@@ -14,6 +14,7 @@ const appConstants = require("./constants/app.constants");
 const v1Router = require("./app/v1/routes");
 const { swaggerUi, swaggerSpec } = require("./app/v1/docs/swagger.docs");
 
+//* Initialize App
 const app = express();
 
 //* Use Libraries
