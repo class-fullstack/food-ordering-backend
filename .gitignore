@@ -2,6 +2,7 @@
 /node_modules/
 /bower_components/
 
+docker-compose-login-face.yml
 # Environment files
 .env
 .env.*.local

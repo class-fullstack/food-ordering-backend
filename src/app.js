@@ -31,6 +31,9 @@ app.use(
   )
 );
 
+// Test Connection to Database
+require("./inits/knex.inits");
+
 //* Group Versions
 const apiRouter = express.Router();
 
