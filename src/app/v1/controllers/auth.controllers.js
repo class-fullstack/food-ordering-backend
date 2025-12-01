@@ -1,4 +1,4 @@
-const { Ok } = require("../../../cors/sucessResponse.cors");
+const { Ok } = require("../../../cors/successResponse.cors");
 const AuthServices = require("../services/auth.services");
 
 class AuthControllers {

@@ -11,6 +11,8 @@ router.get("/", (req, res) => {
   return res.status(200).json(healthCheck);
 });
 
+router.use("/owner", require("./owner"));
+
 //* Auth Routes
 router.use("/auth", require("./auth"));
 

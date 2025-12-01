@@ -1,21 +1,18 @@
 const RolesConstants = {
-  //* Role main owner system
-  ADMIN_SYSTEM: "ADMIN_SYSTEM",
-
   //* Owner Brand
-  OWNER: "OWNER",
+  OWNER: 10,
 
   //* Manager Brand
-  MANAGER: "MANAGER",
+  MANAGER: 20,
 
   //* Cashier Brand
-  CASHIER: "CASHIER",
+  CASHIER: 30,
 
   //* Staff Brand
-  STAFF: "STAFF",
+  STAFF: 40,
 
   //* Customer
-  CUSTOMER: "CUSTOMER",
+  CUSTOMER: 50,
 };
 
 module.exports = RolesConstants;

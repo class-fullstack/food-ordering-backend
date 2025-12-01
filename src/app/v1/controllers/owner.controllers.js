@@ -1,0 +1,12 @@
+const { Ok } = require("../../../cors/successResponse.cors");
+const OwnerServices = require("../services/owner.services");
+
+class OwnerControllers {
+  async bootstrapOwner(req, res) {
+    new Ok({
+      metadata: await OwnerServices.bootstrapOwner(req),
+    }).send(res);
+  }
+}
+
+module.exports = new OwnerControllers();
