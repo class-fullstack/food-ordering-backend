@@ -1,4 +1,4 @@
-const RolesConstants = {
+const rolesConstants = {
   //* Owner Brand
   OWNER: 10,
 
@@ -15,4 +15,4 @@ const RolesConstants = {
   CUSTOMER: 50,
 };
 
-module.exports = RolesConstants;
+module.exports = rolesConstants;

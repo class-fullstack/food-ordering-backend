@@ -7,6 +7,12 @@ class OwnerControllers {
       metadata: await OwnerServices.bootstrapOwner(req),
     }).send(res);
   }
+
+  async loginOwner(req, res) {
+    new Ok({
+      metadata: await OwnerServices.loginOwner(req, res),
+    }).send(res);
+  }
 }
 
 module.exports = new OwnerControllers();

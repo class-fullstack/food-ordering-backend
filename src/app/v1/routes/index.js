@@ -1,4 +1,5 @@
 const express = require("express");
+const devicesMiddlewares = require("../../../middlewares/devices.middlewares");
 
 const router = express.Router();
 
@@ -10,6 +11,8 @@ router.get("/", (req, res) => {
   };
   return res.status(200).json(healthCheck);
 });
+
+router.use(devicesMiddlewares.attachDeviceContext);
 
 router.use("/owner", require("./owner"));
 

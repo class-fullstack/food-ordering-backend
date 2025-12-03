@@ -3,6 +3,7 @@ const asyncHandlerUtils = require("../../../../utils/asyncHandler.utils");
 const ownerControllers = require("../../controllers/owner.controllers");
 const AuthMiddlewares = require("../../../../middlewares/auth.middlewares");
 const RBACMiddlewares = require("../../../../middlewares/rbac.middlewares");
+const devicesMiddlewares = require("../../../../middlewares/devices.middlewares");
 const router = express.Router();
 
 //* Method: POST
@@ -80,9 +81,12 @@ const router = express.Router();
  */
 router.post(
   "/bootstrap",
+
   AuthMiddlewares.verifyAccessToken,
   RBACMiddlewares.requirePermission(),
   asyncHandlerUtils(ownerControllers.bootstrapOwner)
 );
+
+router.post("/login", asyncHandlerUtils(ownerControllers.loginOwner));
 
 module.exports = router;

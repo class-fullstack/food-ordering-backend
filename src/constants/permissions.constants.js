@@ -1,4 +1,4 @@
-const PermissionsConstants = {
+const permissionsConstants = {
   //* ===== RBAC =====
   RBAC_MANAGE: "RBAC_MANAGE",
 
@@ -47,4 +47,4 @@ const PermissionsConstants = {
   SYSTEM_CONFIG_UPDATE: "SYSTEM_CONFIG_UPDATE",
 };
 
-module.exports = PermissionsConstants;
+module.exports = permissionsConstants;

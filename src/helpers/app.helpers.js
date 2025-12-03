@@ -11,5 +11,9 @@ class AppHelpers {
       ? appConstants.APP_ENVS[0]
       : appConstants.APP_ENVS[1];
   }
+
+  static isProduction() {
+    return this.getAppEnv() === appConstants.APP_ENVS[1];
+  }
 }
 module.exports = AppHelpers;
