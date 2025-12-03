@@ -6,6 +6,7 @@ class DevicesMiddlewares {
   attachDeviceContext(req, res, next) {
     try {
       const userAgent = req.headers["user-agent"] || "";
+      const fingerprint = req.headers["x-client-fingerprint"] || "";
       const ipAddress = DevicesHelpers.getClientIp(req);
       const parsedUa = DevicesHelpers.parseUserAgent(userAgent);
 
@@ -30,6 +31,7 @@ class DevicesMiddlewares {
       const deviceModel = deviceModelFromBody || parsedUa.deviceModel;
 
       req.deviceContext = {
+        fingerprint,
         ipAddress,
         userAgent,
         deviceId: deviceIdFromCookie,

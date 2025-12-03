@@ -1,6 +1,6 @@
 const { BadRequestResponse } = require("../../../cors/errorResponse.cors");
 const OwnerModels = require("../models/owner.models");
-const PasswordHelpers = require("../../../helpers/password.helpers");
+const HashHelpers = require("../../../helpers/hash.helpers");
 const JwtHelpers = require("../../../helpers/jwt.helpers");
 const { DURATION } = require("../../../constants/time.constants");
 const CookieHelpers = require("../../../helpers/cookie.helpers");
@@ -8,6 +8,8 @@ const userDevicesModels = require("../models/userDevices.models");
 const { knex } = require("../../../inits/knex.inits");
 const DateHelpers = require("../../../helpers/date.helper");
 const RandomHelpers = require("../../../helpers/random.helpers");
+const sessionsConstants = require("../../../constants/sessions.constants");
+const userSessionsModels = require("../models/userSessions.models");
 class OwnerService {
   async bootstrapOwner(req) {
     const { email, password } = req.body;
@@ -29,7 +31,7 @@ class OwnerService {
     }
 
     // 3. Hash password
-    const password_hash = await PasswordHelpers.hashPassword(password);
+    const password_hash = await HashHelpers.hashPassword(password);
 
     // 4. Tạo owner + role + gán role (all-in-one, có transaction)
     const { owner } = await OwnerModels.createOwnerWithRole({
@@ -50,12 +52,14 @@ class OwnerService {
     const { email, password } = req.body;
 
     const {
+      fingerprint,
       ipAddress,
       deviceId,
       deviceName,
       deviceOs,
       deviceModel,
       deviceType,
+      userAgent,
     } = req.deviceContext;
 
     // 1. Tìm owner theo email
@@ -75,7 +79,7 @@ class OwnerService {
     }
 
     // 2. So sánh password
-    const isPasswordValid = await PasswordHelpers.comparePassword(
+    const isPasswordValid = await HashHelpers.comparePassword(
       password,
       owner.password_hash
     );
@@ -110,7 +114,10 @@ class OwnerService {
       device_type: deviceType,
       device_os: deviceOs,
       device_model: deviceModel,
+      device_fingerprint: fingerprint,
+      is_inactive: true,
     };
+
     const queryField = {
       id: deviceId,
       user_id: owner.id,
@@ -120,7 +127,14 @@ class OwnerService {
     };
 
     let resultDevice;
-    if (deviceId) {
+
+    // Find device old
+    const existingDevice = await userDevicesModels.existsUserDevice({
+      device_fingerprint: fingerprint,
+      is_inactive: true,
+    });
+
+    if (existingDevice) {
       const dataUpsertFieldWithoutId = (({ id, ...rest }) => rest)(
         dataUpsertField
       );
@@ -137,17 +151,56 @@ class OwnerService {
       CookieHelpers.setDeviceCookie(res, resultDevice.id);
     }
 
+    // Session
+    const newRefreshTokenHash = await HashHelpers.hashRefreshToken(
+      refreshToken
+    );
+
+    const newExpiredAt = DateHelpers.extendExpiration(
+      DateHelpers.currentDate(),
+      DURATION.SEVEN_DAYS
+    );
+
+    const insertField = {
+      id: RandomHelpers.generateId(),
+      device_id: resultDevice.id,
+      user_agent: userAgent,
+      refresh_token_hash: newRefreshTokenHash,
+      expired_at: newExpiredAt,
+      ip_address: ipAddress,
+      auth_type: sessionsConstants.LOGIN_TYPE.LOCAL,
+    };
+    const result = await userSessionsModels.insertUserSessions(
+      {
+        ...insertField,
+        user_id: owner.id,
+        device_id: resultDevice.id,
+      },
+      { id: "id" }
+    );
+
     return {
       message: "Login successful.",
       owner: {
         id: owner.id,
         email: owner.email,
       },
-      deviceId: resultDevice.id,
+      deviceId: {
+        id: resultDevice.id,
+        fingerprint: fingerprint,
+      },
       token: {
         access: accessToken,
         expireIn: DURATION.FIFTEEN_MINUTES, // 15 minutes
       },
+    };
+  }
+
+  async logoutOwner(req, res) {
+    CookieHelpers.clearAuthCookies(res);
+
+    return {
+      message: "Logout successful.",
     };
   }
 }

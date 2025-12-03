@@ -17,3 +17,8 @@ CREATE TABLE user_devices (
 
 CREATE INDEX ix_user_devices_user
     ON user_devices (user_id);
+
+---
+ALTER TABLE user_devices
+ADD COLUMN device_fingerprint text,
+ADD COLUMN is_inactive boolean NOT NULL DEFAULT false;
