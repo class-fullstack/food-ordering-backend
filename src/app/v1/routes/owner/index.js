@@ -4,6 +4,7 @@ const ownerControllers = require("../../controllers/owner.controllers");
 const AuthMiddlewares = require("../../../../middlewares/auth.middlewares");
 const RBACMiddlewares = require("../../../../middlewares/rbac.middlewares");
 const devicesMiddlewares = require("../../../../middlewares/devices.middlewares");
+const rolesConstants = require("../../../../constants/RBAC/roles.constants");
 const router = express.Router();
 
 //* Method: POST
@@ -81,12 +82,18 @@ const router = express.Router();
  */
 router.post(
   "/bootstrap",
-
   AuthMiddlewares.verifyAccessToken,
-  RBACMiddlewares.requirePermission(),
   asyncHandlerUtils(ownerControllers.bootstrapOwner)
 );
 
 router.post("/login", asyncHandlerUtils(ownerControllers.loginOwner));
+
+router.use(AuthMiddlewares.verifyRefreshToken);
+router.post(
+  "/logout",
+  AuthMiddlewares.verifyAccessToken,
+  RBACMiddlewares.requireOwnerRole([rolesConstants.OWNER]),
+  asyncHandlerUtils(ownerControllers.logoutOwner)
+);
 
 module.exports = router;

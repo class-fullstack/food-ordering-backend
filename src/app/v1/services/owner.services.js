@@ -197,8 +197,6 @@ class OwnerService {
   }
 
   async logoutOwner(req, res) {
-    CookieHelpers.clearAuthCookies(res);
-
     return {
       message: "Logout successful.",
     };

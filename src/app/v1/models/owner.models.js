@@ -1,5 +1,5 @@
 const appConfigs = require("../../../configs/app.configs");
-const rolesConstants = require("../../../constants/roles.constants");
+const rolesConstants = require("../../../constants/RBAC/roles.constants");
 const { knex } = require("../../../inits/knex.inits");
 const RandomHelpers = require("../../../helpers/random.helpers");
 class OwnerModels {

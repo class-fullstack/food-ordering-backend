@@ -18,5 +18,7 @@ router.use("/owner", require("./owner"));
 
 //* Auth Routes
 router.use("/auth", require("./auth"));
+router.use("/roles", require("./roles"));
+router.use("/permissions", require("./permissions"));
 
 module.exports = router;

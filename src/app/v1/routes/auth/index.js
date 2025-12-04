@@ -35,7 +35,6 @@ const router = express.Router();
 router.post(
   "/register/user",
   AuthMiddlewares.verifyAccessToken,
-  RBACMiddlewares.requirePermission("ADMIN_SYSTEM", "MANAGE_MENU"),
   asyncHandlerUtils(authControllers.registerUser)
 );
 

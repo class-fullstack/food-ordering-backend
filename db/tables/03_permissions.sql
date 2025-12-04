@@ -8,3 +8,5 @@ CREATE TABLE permissions (
     created_at  timestamptz NOT NULL DEFAULT now(),
     updated_at  timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE permissions DROP COLUMN module;

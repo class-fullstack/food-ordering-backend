@@ -1,9 +1,9 @@
-const { Ok } = require("../../../cors/successResponse.cors");
+const { Ok, Created } = require("../../../cors/successResponse.cors");
 const OwnerServices = require("../services/owner.services");
 
 class OwnerControllers {
   async bootstrapOwner(req, res) {
-    new Ok({
+    new Created({
       metadata: await OwnerServices.bootstrapOwner(req),
     }).send(res);
   }
@@ -11,6 +11,12 @@ class OwnerControllers {
   async loginOwner(req, res) {
     new Ok({
       metadata: await OwnerServices.loginOwner(req, res),
+    }).send(res);
+  }
+
+  async logoutOwner(req, res) {
+    new Ok({
+      metadata: await OwnerServices.logoutOwner(req, res),
     }).send(res);
   }
 }

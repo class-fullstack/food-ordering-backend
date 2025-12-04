@@ -1,18 +1,13 @@
 const rolesConstants = {
   //* Owner Brand
   OWNER: 10,
-
-  //* Manager Brand
-  MANAGER: 20,
-
-  //* Cashier Brand
-  CASHIER: 30,
+  ADMIN: 11,
 
   //* Staff Brand
-  STAFF: 40,
+  STAFF: 20,
 
   //* Customer
-  CUSTOMER: 50,
+  CUSTOMER: 30,
 };
 
 module.exports = rolesConstants;
