@@ -20,5 +20,6 @@ router.use("/owner", require("./owner"));
 router.use("/auth", require("./auth"));
 router.use("/roles", require("./roles"));
 router.use("/permissions", require("./permissions"));
+router.use("/rbac", require("./rbac"));
 
 module.exports = router;

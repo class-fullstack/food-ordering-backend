@@ -19,7 +19,7 @@ router.get(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW_ALL,
   ]),
-  asyncHandlerUtils.asyncHandler(PermissionsControllers.getAllPermissions)
+  asyncHandlerUtils(PermissionsControllers.getAllPermissions)
 );
 
 //* Method: GET - get permission by id
@@ -33,7 +33,7 @@ router.get(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW,
   ]),
-  asyncHandlerUtils.asyncHandler(PermissionsControllers.getPermissionById)
+  asyncHandlerUtils(PermissionsControllers.getPermissionById)
 );
 
 //* Method: POST - create new permission
@@ -44,7 +44,7 @@ router.post(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_CREATE,
   ]),
-  asyncHandlerUtils.asyncHandler(PermissionsControllers.createPermission)
+  asyncHandlerUtils(PermissionsControllers.createPermission)
 );
 
 //* Method: PATCH - update permission
@@ -55,7 +55,7 @@ router.patch(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_UPDATE,
   ]),
-  asyncHandlerUtils.asyncHandler(PermissionsControllers.updatePermission)
+  asyncHandlerUtils(PermissionsControllers.updatePermission)
 );
 
 //* Method: DELETE - delete permission (soft delete)
@@ -66,7 +66,7 @@ router.delete(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_DELETE,
   ]),
-  asyncHandlerUtils.asyncHandler(PermissionsControllers.deletePermission)
+  asyncHandlerUtils(PermissionsControllers.deletePermission)
 );
 
 module.exports = router;

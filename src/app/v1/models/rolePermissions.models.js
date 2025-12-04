@@ -1,4 +1,4 @@
-const knex = require("../configs/knex");
+const { knex } = require("../../../inits/knex.inits");
 
 class RolePermissions {
   async existRolePermissions(roleId) {

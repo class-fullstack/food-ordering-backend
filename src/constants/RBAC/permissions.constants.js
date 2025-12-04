@@ -1,6 +1,7 @@
 const permissionsConstants = {
   //* ===== RBAC =====
   ASSIGN_ROLE_PERMISSIONS: "ASSIGN_ROLE_PERMISSIONS",
+  REVOKE_ROLE_PERMISSIONS: "REVOKE_ROLE_PERMISSIONS",
 
   //* ===== ROLES =====
   ROLE_VIEW_ALL: "ROLE_VIEW_ALL",

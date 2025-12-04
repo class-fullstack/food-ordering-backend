@@ -34,7 +34,6 @@ class RBACMiddlewares {
             })
           );
         }
-        console.log("User Roles:", userRoles);
         req.userRoles = userRoles;
         return next();
       } catch (error) {
@@ -72,7 +71,6 @@ class RBACMiddlewares {
           );
         }
 
-        console.log("User Roles:", userRoles);
         req.userRoles = userRoles;
         return next();
       } catch (error) {

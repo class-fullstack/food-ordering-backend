@@ -18,7 +18,7 @@ router.get(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW_ALL,
   ]),
-  asyncHandlerUtils.asyncHandler(RolesControllers.getAllRoles)
+  asyncHandlerUtils(RolesControllers.getAllRoles)
 );
 
 router.get(
@@ -31,7 +31,7 @@ router.get(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW,
   ]),
-  asyncHandlerUtils.asyncHandler(RolesControllers.getRoleById)
+  asyncHandlerUtils(RolesControllers.getRoleById)
 );
 
 //* Method: POST
@@ -42,7 +42,7 @@ router.post(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_CREATE,
   ]),
-  asyncHandlerUtils.asyncHandler(RolesControllers.createRole)
+  asyncHandlerUtils(RolesControllers.createRole)
 );
 
 router.post(
@@ -52,7 +52,7 @@ router.post(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_UPDATE,
   ]),
-  asyncHandlerUtils.asyncHandler(RolesControllers.updateRole)
+  asyncHandlerUtils(RolesControllers.updateRole)
 );
 
 router.post(
@@ -62,7 +62,7 @@ router.post(
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_DELETE,
   ]),
-  asyncHandlerUtils.asyncHandler(RolesControllers.deleteRole)
+  asyncHandlerUtils(RolesControllers.deleteRole)
 );
 
 module.exports = router;

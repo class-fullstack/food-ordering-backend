@@ -39,7 +39,13 @@ class RolesServices {
   }
 
   async createRole(req) {
-    const { name, description } = req.body;
+    const { code, name, description } = req.body;
+
+    if (!code) {
+      throw new BadRequestResponse({
+        message: "Role code is required.",
+      });
+    }
 
     if (!name) {
       throw new BadRequestResponse({
@@ -49,6 +55,7 @@ class RolesServices {
 
     const newRole = await RolesModels.insertRole(
       {
+        code,
         name,
         description,
       },
