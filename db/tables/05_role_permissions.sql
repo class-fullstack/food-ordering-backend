@@ -13,3 +13,7 @@ CREATE TABLE role_permissions (
 CREATE UNIQUE INDEX ux_role_permissions_role_perm
     ON role_permissions (role_id, permission_id)
     WHERE is_deleted = false;
+
+-- add more
+ALTER TABLE role_permissions
+ADD CONSTRAINT unique_role_permission UNIQUE (role_id, permission_id);

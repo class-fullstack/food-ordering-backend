@@ -21,6 +21,14 @@ class AuthMiddlewares {
 
       const decodedToken = JwtHelpers.verifyToken(accessToken);
 
+      if (!decodedToken) {
+        return next(
+          new UnauthorizedResponse({
+            message: "Access token Expired",
+          })
+        );
+      }
+
       req.userAccess = decodedToken;
       return next();
     } catch (error) {

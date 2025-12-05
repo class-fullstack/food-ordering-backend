@@ -25,6 +25,7 @@ class RBACModels {
     }));
   }
 
+  //- Middleware isUsed
   async getPermissionsByRoleIds(roleIds = []) {
     if (!Array.isArray(roleIds) || roleIds.length === 0) {
       return {};
@@ -39,7 +40,6 @@ class RBACModels {
         "rp.role_id",
         "p.id as permission_id",
         "p.code as permission_code",
-        "p.name as permission_name",
         "p.description as permission_description"
       );
 
@@ -62,8 +62,6 @@ class RBACModels {
   }
 
   async getPermissionsByRoleId(roleId) {
-    if (!roleId) return [];
-
     const rows = await knex("role_permissions as rp")
       .join("permissions as p", function () {
         this.on("p.id", "rp.permission_id").andOn(
@@ -71,25 +69,65 @@ class RBACModels {
           knex.raw("false")
         );
       })
+      .join("roles as r", function () {
+        this.on("r.id", "rp.role_id").andOn("r.is_deleted", knex.raw("false"));
+      })
       .where("rp.role_id", roleId)
       .andWhere("rp.is_deleted", false)
       .distinct(
+        // Role fields
+        "r.id as role_id",
+        "r.code as role_code",
+        "r.name as role_name",
+        "r.description as role_description",
+        "r.is_system as role_is_system",
+
+        // Permission fields
         "p.id as permission_id",
         "p.code as permission_code",
-        "p.name as permission_name",
         "p.description as permission_description",
-        "p.is_system"
+        // nếu có module:
+        "p.module as permission_module"
       );
 
+    if (rows.length === 0) {
+      // Không có permission nào nhưng vẫn trả role cho FE nếu anh muốn
+      const role = await knex("roles")
+        .where({ id: roleId, is_deleted: false })
+        .first(
+          "id as role_id",
+          "code as role_code",
+          "name as role_name",
+          "description as role_description",
+          "is_system as role_is_system"
+        );
+
+      return {
+        role: role || null,
+        permissions: [],
+      };
+    }
+    const first = rows[0];
+    const role = {
+      id: first.role_id,
+      code: first.role_code,
+      name: first.role_name,
+      description: first.role_description,
+      is_system: first.role_is_system,
+    };
+
+    // Map permissions
     const permissions = rows.map((row) => ({
       id: row.permission_id,
       code: row.permission_code,
-      name: row.permission_name,
       description: row.permission_description,
-      is_system: row.is_system,
+      // module: row.permission_module, // nếu có
     }));
 
-    return permissions;
+    return {
+      role,
+      permissions,
+    };
   }
 
   async assignPermissionsToRole(roleId, permissionId, returnFields) {

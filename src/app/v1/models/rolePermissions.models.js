@@ -12,6 +12,17 @@ class RolePermissions {
     return !!row;
   }
 
+  async existRolesByPermissionId(permissionId) {
+    if (!permissionId) return false;
+
+    const row = await knex("role_permissions")
+      .where("permission_id", permissionId)
+      .andWhere("is_deleted", false)
+      .first("id");
+
+    return !!row;
+  }
+
   async softDeleteRolePermissions(roleId, permissionId) {
     const permissionIds = Array.isArray(permissionId)
       ? permissionId

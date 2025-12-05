@@ -1,9 +1,13 @@
 const { BadRequestResponse } = require("../../../cors/errorResponse.cors");
+const RandomHelpers = require("../../../helpers/random.helpers");
 const PermissionsModel = require("../models/permissions.models");
+const RolePermissionsModels = require("../models/rolePermissions.models");
 
 class PermissionsServices {
   async getAllPermissions(req) {
-    const { page, limit, search, sortBy, sortOrder } = req.query;
+    const { page, limit, search, sortBy, sortOrder, ...rest } = req.query;
+
+    const filters = { ...rest };
 
     const PermissionsData = await PermissionsModel.getAllPermissions({
       page: parseInt(page, 10) || 1,
@@ -11,6 +15,7 @@ class PermissionsServices {
       search: search || "",
       sortBy: sortBy || "id",
       sortOrder: sortOrder === "desc" ? "desc" : "asc",
+      filters,
     });
 
     return PermissionsData;
@@ -22,7 +27,6 @@ class PermissionsServices {
     const permission = await PermissionsModel.getPermissionById(permissionId, [
       "id",
       "code",
-      "name",
       "description",
       "created_at",
       "updated_at",
@@ -38,7 +42,7 @@ class PermissionsServices {
   }
 
   async createPermission(req) {
-    const { code, name, description } = req.body;
+    const { code, module, description } = req.body;
 
     if (!code) {
       throw new BadRequestResponse({
@@ -46,7 +50,7 @@ class PermissionsServices {
       });
     }
 
-    if (!name) {
+    if (!module) {
       throw new BadRequestResponse({
         message: "Permission name is required.",
       });
@@ -54,11 +58,12 @@ class PermissionsServices {
 
     const newPermission = await PermissionsModel.insertPermission(
       {
+        id: RandomHelpers.generateId(),
         code,
-        name,
+        module,
         description,
       },
-      ["id", "name", "description", "code"]
+      ["id", "description", "code", "module"]
     );
 
     return newPermission;
@@ -66,7 +71,7 @@ class PermissionsServices {
 
   async updatePermission(req) {
     const { permissionId } = req.params;
-    const { name, description } = req.body;
+    const { module, description } = req.body;
 
     if (!permissionId) {
       throw new BadRequestResponse({
@@ -87,10 +92,10 @@ class PermissionsServices {
     const updatedPermission = await PermissionsModel.updatePermission(
       permissionId,
       {
-        name,
+        module,
         description,
       },
-      ["id", "name", "description"]
+      ["id", "description"]
     );
 
     return updatedPermission;
@@ -109,16 +114,15 @@ class PermissionsServices {
       permissionId,
       ["id"]
     );
+
     if (!existingPermission) {
       throw new BadRequestResponse({
         message: "Permission not found.",
       });
     }
 
-    const isUsedPermission = await PermissionsModel.existRolesByPermissionId(
-      permissionId
-    );
-
+    const isUsedPermission =
+      await RolePermissionsModels.existRolesByPermissionId(permissionId);
     if (isUsedPermission) {
       throw new BadRequestResponse({
         message: "You need revoke all permission",

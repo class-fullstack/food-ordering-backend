@@ -1,5 +1,6 @@
 const rolesConstants = require("../../../constants/RBAC/roles.constants");
 const { BadRequestResponse } = require("../../../cors/errorResponse.cors");
+const RandomHelpers = require("../../../helpers/random.helpers");
 const RolesModels = require("../../v1/models/roles.models");
 const rolePermissionsModels = require("../models/rolePermissions.models");
 
@@ -39,13 +40,7 @@ class RolesServices {
   }
 
   async createRole(req) {
-    const { code, name, description } = req.body;
-
-    if (!code) {
-      throw new BadRequestResponse({
-        message: "Role code is required.",
-      });
-    }
+    const { name, description } = req.body;
 
     if (!name) {
       throw new BadRequestResponse({
@@ -55,7 +50,7 @@ class RolesServices {
 
     const newRole = await RolesModels.insertRole(
       {
-        code,
+        id: RandomHelpers.generateId(),
         name,
         description,
       },
@@ -82,7 +77,7 @@ class RolesServices {
       });
     }
 
-    const updatedRole = await RolesModels.updateRole(
+    const updatedRole = await RolesModels.updateRoleById(
       roleId,
       {
         name,

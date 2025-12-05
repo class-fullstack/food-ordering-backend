@@ -1,4 +1,3 @@
-// src/modules/.../routes/role-permissions.routes.js
 const express = require("express");
 const asyncHandlerUtils = require("../../../../utils/asyncHandler.utils");
 const RBACControllers = require("../../controllers/RBAC.controllers");
@@ -8,6 +7,19 @@ const rolesConstants = require("../../../../constants/RBAC/roles.constants");
 const permissionsConstants = require("../../../../constants/RBAC/permissions.constants");
 
 const router = express.Router();
+
+//* Method: Get
+router.get(
+  "/roles/:roleId/permissions",
+  AuthMiddlewares.verifyAccessToken,
+  RBACMiddlewares.requireAtLeastOneRole([rolesConstants.OWNER]),
+  RBACMiddlewares.requireAtLeastOnePermission([
+    permissionsConstants.VIEW_ROLES_PERMISSIONS,
+  ]),
+  asyncHandlerUtils(RBACControllers.getPermissionsByRoleId)
+);
+
+//* Method: Post
 router.post(
   "/roles/:roleId/permissions/assign",
   AuthMiddlewares.verifyAccessToken,

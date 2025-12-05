@@ -59,14 +59,10 @@ class RBACMiddlewares {
 
         const userRoles = await RBACModels.getUserRoles(userId);
 
-        const hasAtLeastOneRole = userRoles.some((userRole) =>
-          roleCodes.includes(userRole.code)
-        );
-
-        if (!hasAtLeastOneRole) {
+        if (!userRoles) {
           return next(
             new ForbiddenResponse({
-              message: "User does not have any of the required roles.",
+              message: "Account need add role",
             })
           );
         }
@@ -83,6 +79,20 @@ class RBACMiddlewares {
   requireAtLeastOnePermission(permissionCodes) {
     return async (req, res, next) => {
       try {
+        // Owner next not need check permissions
+        const userRoles = req.userRoles || [];
+
+        const isOwner = userRoles.some(
+          (role) => Number(role.code) === Number(rolesConstants.OWNER)
+        );
+
+        if (isOwner) {
+          console.log("User is OWNER -> skip permission check");
+          req.userPermissions = [];
+          return next();
+        }
+
+        // If not must is Onwer
         const rolePermissionsMap = await RBACModels.getPermissionsByRoleIds(
           req.userRoles.map((role) => role.id)
         );

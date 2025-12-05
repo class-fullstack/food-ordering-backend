@@ -12,10 +12,7 @@ const router = express.Router();
 router.get(
   "/",
   AuthMiddlewares.verifyAccessToken,
-  RBACMiddlewares.requireAtLeastOneRole([
-    rolesConstants.OWNER,
-    rolesConstants.ADMIN,
-  ]),
+  RBACMiddlewares.requireAtLeastOneRole([rolesConstants.OWNER]),
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW_ALL,
   ]),
@@ -26,10 +23,7 @@ router.get(
 router.get(
   "/:permissionId",
   AuthMiddlewares.verifyAccessToken,
-  RBACMiddlewares.requireAtLeastOneRole([
-    rolesConstants.OWNER,
-    rolesConstants.ADMIN,
-  ]),
+  RBACMiddlewares.requireAtLeastOneRole([rolesConstants.OWNER]),
   RBACMiddlewares.requireAtLeastOnePermission([
     permissionsConstants.PERMISSION_VIEW,
   ]),
@@ -47,8 +41,8 @@ router.post(
   asyncHandlerUtils(PermissionsControllers.createPermission)
 );
 
-//* Method: PATCH - update permission
-router.patch(
+//* Method: POST - update permission
+router.post(
   "/:permissionId",
   AuthMiddlewares.verifyAccessToken,
   RBACMiddlewares.requireAtLeastOneRole([rolesConstants.OWNER]),
